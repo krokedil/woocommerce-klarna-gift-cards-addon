@@ -23,6 +23,14 @@ function klarna_checkout_get_gift_cards_row_html() {
 	}
 }
 
+add_action('kco_widget_before_cart_items', 'klarna_checkout_get_gift_cards_form' );
+
+function klarna_checkout_get_gift_cards_form() {
+	if ( function_exists( 'rpgc_checkout_form' ) ) {
+		echo rpgc_checkout_form();
+	}
+}
+
 
 /**
  * Adds gift card in cart content sent to Klarna
@@ -58,8 +66,8 @@ function krokedil_klarna_process_cart_contents( $cart ) {
 						'reference'        => 'DISCOUNT',
 						'name'             => $card_name,
 						'quantity'         => 1,
-						'unit_price'       => - $card_amount*100,
-						'total_amount'     => - $card_amount*100,
+						'unit_price'       => - $price*100,
+						'total_amount'     => - $price*100,
 						'tax_rate'         => 0,
 						'total_tax_amount' => 0,
 					);
@@ -70,7 +78,7 @@ function krokedil_klarna_process_cart_contents( $cart ) {
 						'reference'  => 'DISCOUNT',
 						'name'       => $card_name,
 						'quantity'   => 1,
-						'unit_price' => - $card_amount*100,
+						'unit_price' => - $price*100,
 						'tax_rate'   => 0,
 					);
 					//$order_total = $order_total - $card_amount;
@@ -80,7 +88,6 @@ function krokedil_klarna_process_cart_contents( $cart ) {
 
 		}
 	}
-	
 	return $cart;
 }
 
@@ -115,9 +122,9 @@ function krokedil_rpgc_update_card() {
  *
  * @since  1.0
  **/
-add_action( 'woocommerce_checkout_order_processed', 'krokedil_update_totals_for_gift_card' );
+add_action( 'klarna_after_kco_push_notification', 'krokedil_update_totals_for_gift_card', 10, 2 );
 
-function krokedil_update_totals_for_gift_card( $order_id ) {
+function krokedil_update_totals_for_gift_card( $order_id, $klarna_order_id ) {
 	$gift_card_payments = get_post_meta( $order_id, 'rpgc_payment', true );
 	$order = wc_get_order( $order_id );
 	if( 'klarna_checkout' == $order->payment_method && !empty( $gift_card_payments ) ) {
@@ -127,5 +134,6 @@ function krokedil_update_totals_for_gift_card( $order_id ) {
 		}
 		$new_total = $order->order_total - $total_gift_card_payment;
 		$order->set_total( $new_total );
+		$order->save();
 	}
 }
