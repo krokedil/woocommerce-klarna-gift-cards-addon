@@ -46,7 +46,7 @@ function krokedil_klarna_process_cart_contents( $cart ) {
 
 			$giftCards = WC()->session->giftcard_post;
 
-			$giftcard = new WPR_Giftcard();
+			$giftcard = new KODIAK_Giftcard();
 			$price = $giftcard->wpr_get_payment_amount();
 
 			foreach ( $giftCards as $key => $giftCard) { 
