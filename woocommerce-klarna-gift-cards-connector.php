@@ -105,7 +105,7 @@ add_action( 'template_redirect', 'krokedil_rpgc_update_card' );
 
 function krokedil_rpgc_update_card() {
 	if ( isset( WC()->session->cart ) ) {
-		if ( isset( $_GET['sid'] ) && 'yes' == $_GET['thankyou'] ) {
+		if ( isset( $_GET['sid'] ) && 'yes' == $_GET['thankyou'] && function_exists( 'rpgc_update_card' ) ) {
 			rpgc_update_card( $_GET['sid'] );
 		}
 	}
