@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Klarna Gift Cards Connector
 Plugin URI: http://krokedil.com
 Description: Connector for making WooCommerce - Gift Cards compatible with Klarna Checkout.
-Version: 1.0
+Version: 1.1
 Author: Krokedil
 Author URI: http://krokedil.com
 */
